@@ -10,7 +10,27 @@ namespace Tetris
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Программисты С#");
+            Console.SetWindowSize(40, 40);
+            Console.SetBufferSize(40, 40);
+
+            Point p1 = new Point();
+
+            p1.x = 2;
+            p1.y = 3;
+            p1.c = '*';
+
+            p1.Draw();
+
+            Point p2 = new Point();
+
+            p2.x = 3;
+            p2.y = 4;
+            p2.c = '#';
+
+            p2.Draw();
+
+            Console.ReadLine();
         }
+        
     }
 }
