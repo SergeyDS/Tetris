@@ -10,7 +10,18 @@ namespace Tetris
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Программисты С#");
+            Console.SetWindowSize(40, 40);
+            Console.SetBufferSize(40, 40);
+
+            //Square s = new Square(10,15,'*');
+            //s.Draw();
+            Stick stick = new Stick(6, 6, '*');
+            stick.Draw();
+
+            
+
+            Console.ReadLine();
         }
+
     }
 }
