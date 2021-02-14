@@ -21,11 +21,13 @@ namespace Tetris
 
             p1.Draw();
 
-            Point p2 = new Point();
-
-            p2.x = 3;
-            p2.y = 4;
-            p2.c = '#';
+            Point p2 = new Point()
+            {
+                x = 4,
+                y = 5,
+                c = '#',
+            };
+           
 
             p2.Draw();
 
