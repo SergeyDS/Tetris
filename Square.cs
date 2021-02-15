@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    public class Square
+    class Square : Figure
     {
-        Point[] points = new Point[4];
+        
 
         public Square(int x,int y,char sym)
         {
@@ -18,13 +18,7 @@ namespace Tetris
             points[3] = new Point(x+1, y+1, sym);
         }
 
-        public void Draw()
-        {
-            foreach(Point p in points)
-            {
-                p.Draw();
-            }
-        }
+        
     }
 
 }
