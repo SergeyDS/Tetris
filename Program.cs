@@ -15,17 +15,17 @@ namespace Tetris
             Console.SetBufferSize(40, 40);
 
             FigureGenerator generator = new FigureGenerator(20, 0, '*');
-            Figure s=null;
+            Figure s = null;
 
             while(true)
             {
-                FigureFall(s,generator);
-                //s.Draw();
+                FigureFall(ref s,generator);
+                s.Draw();
 
             }
            
         }
-        static void FigureFall(Figure fig,FigureGenerator generator)
+        static void FigureFall(ref Figure fig,FigureGenerator generator)
         {
             fig = generator.GetNewFigure();
             fig.Draw();
