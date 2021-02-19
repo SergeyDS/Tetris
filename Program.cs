@@ -35,12 +35,12 @@ namespace Tetris
                 case ConsoleKey.LeftArrow:
                     currentFigure.TryMove(Direction.LEFT);
                     break;
-                //case ConsoleKey.RightArrow:
-                //    currentFigure.Move(Direction.RIGHT);
-                //    break;
-                //case ConsoleKey.DownArrow:
-                //    currentFigure.Move(Direction.DOWN);
-                //    break;
+                case ConsoleKey.RightArrow:
+                    currentFigure.TryMove(Direction.RIGHT);
+                    break;
+                case ConsoleKey.DownArrow:
+                    currentFigure.TryMove(Direction.DOWN);
+                    break;
             }
         }
     }
