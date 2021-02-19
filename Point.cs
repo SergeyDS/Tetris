@@ -17,6 +17,14 @@ namespace Tetris
             Console.WriteLine(c);
         }
 
+
+        public Point(Point p)
+        {
+            x = p.x;
+            y = p.y;
+            c = p.c;
+        }
+
         public Point(int a, int b, char sym)
         {
             x = a;
@@ -24,6 +32,13 @@ namespace Tetris
             c = sym;
         }
 
+        internal void Move(Point[] pList,Direction dir)
+        { 
+            foreach(var p in pList)
+            {
+                p.Move(dir);
+            }
+        }
         internal void Move(Direction dir)
         {
             switch(dir)

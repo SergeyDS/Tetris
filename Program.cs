@@ -33,14 +33,14 @@ namespace Tetris
               switch(key.Key)
             {
                 case ConsoleKey.LeftArrow:
-                    currentFigure.Move(Direction.LEFT);
+                    currentFigure.TryMove(Direction.LEFT);
                     break;
-                case ConsoleKey.RightArrow:
-                    currentFigure.Move(Direction.RIGHT);
-                    break;
-                case ConsoleKey.DownArrow:
-                    currentFigure.Move(Direction.DOWN);
-                    break;
+                //case ConsoleKey.RightArrow:
+                //    currentFigure.Move(Direction.RIGHT);
+                //    break;
+                //case ConsoleKey.DownArrow:
+                //    currentFigure.Move(Direction.DOWN);
+                //    break;
             }
         }
     }
