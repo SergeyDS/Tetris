@@ -6,52 +6,52 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-  public class Point
+    public class Point
     {
-        public int x;
-        public int y;
-        public char c;
+        public int X;
+        public int Y;
+        public char C;
         public void Draw()
         {
-            Console.SetCursorPosition(x, y);
-            Console.Write(c);
+            Console.SetCursorPosition(X, Y);
+            Console.Write(C);
             Console.SetCursorPosition(0, 0);
         }
 
 
         public Point(Point p)
         {
-            x = p.x;
-            y = p.y;
-            c = p.c;
+            X = p.X;
+            Y = p.Y;
+            C = p.C;
         }
 
         public Point(int a, int b, char sym)
         {
-            x = a;
-            y = b;
-            c = sym;
+            X = a;
+            Y = b;
+            C = sym;
         }
 
-        internal void Move(Point[] pList,Direction dir)
-        { 
-            foreach(var p in pList)
+        internal void Move(Point[] pList, Direction dir)
+        {
+            foreach (var p in pList)
             {
                 p.Move(dir);
             }
         }
         internal void Move(Direction dir)
         {
-            switch(dir)
+            switch (dir)
             {
                 case Direction.DOWN:
-                    y += 1;
+                    Y += 1;
                     break;
                 case Direction.LEFT:
-                    x -= 1;
+                    X -= 1;
                     break;
                 case Direction.RIGHT:
-                    x += 1;
+                    X += 1;
                     break;
 
 
@@ -60,7 +60,7 @@ namespace Tetris
 
         internal void Hide()
         {
-            Console.SetCursorPosition(x, y);
+            Console.SetCursorPosition(X, Y);
             Console.Write(" ");
         }
 

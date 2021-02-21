@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-  abstract class Figure
+    abstract class Figure
     {
         const int LENGHT = 4;
-        
+
         protected Point[] points = new Point[LENGHT];
 
         public void Draw()
@@ -33,9 +33,9 @@ namespace Tetris
         //}
 
         public abstract void Rotate(Point[] pList);
-        public void Move(Point[] pList,Direction dir)
+        public void Move(Point[] pList, Direction dir)
         {
-            foreach(var p in pList)
+            foreach (var p in pList)
             {
                 p.Move(dir);
             }
@@ -64,9 +64,9 @@ namespace Tetris
 
         private bool VerifyPosition(Point[] pList)
         {
-            foreach(var p in pList)
+            foreach (var p in pList)
             {
-                if (p.x < 0 || p.y < 0 || p.x >= Field.WIDHT || p.y >= Field.HEIGHT)
+                if (p.X < 0 || p.Y < 0 || p.X >= Field.Width || p.Y >= Field.Height)
                     return false;
             }
             return true;
@@ -75,15 +75,15 @@ namespace Tetris
         private Point[] Clone()
         {
             var newPoints = new Point[LENGHT];
-            for(int i=0; i< LENGHT; i++)
+            for (int i = 0; i < LENGHT; i++)
             {
                 newPoints[i] = new Point(points[i]);
             }
             return newPoints;
         }
 
-       
-        
+
+
 
         public void Hide()
         {
@@ -93,6 +93,6 @@ namespace Tetris
             }
         }
 
-       
+
     }
 }

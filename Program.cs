@@ -11,26 +11,28 @@ namespace Tetris
     {
         static void Main(string[] args)
         {
-            Console.SetWindowSize(Field.WIDHT,Field.HEIGHT);
-            Console.SetBufferSize(Field.WIDHT, Field.HEIGHT);
+            Console.SetWindowSize(Field.Width, Field.Height);
+            Console.SetBufferSize(Field.Width, Field.Height);
+
+
 
             FigureGenerator generator = new FigureGenerator(20, 0, '*');
             Figure currentFigure = generator.GetNewFigure();
 
-            while(true)
+            while (true)
             {
-               if(Console.KeyAvailable)
+                if (Console.KeyAvailable)
                 {
                     var key = Console.ReadKey();
                     HandlKey(currentFigure, key);
                 }
             }
-           
+
         }
 
         private static void HandlKey(Figure currentFigure, ConsoleKeyInfo key)
         {
-              switch(key.Key)
+            switch (key.Key)
             {
                 case ConsoleKey.LeftArrow:
                     currentFigure.TryMove(Direction.LEFT);
@@ -42,8 +44,8 @@ namespace Tetris
                     currentFigure.TryMove(Direction.DOWN);
                     break;
                 case ConsoleKey.Spacebar:
-                     currentFigure.TryRotate();
-                     break;
+                    currentFigure.TryRotate();
+                    break;
             }
         }
     }
