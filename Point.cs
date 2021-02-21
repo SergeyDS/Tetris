@@ -14,7 +14,8 @@ namespace Tetris
         public void Draw()
         {
             Console.SetCursorPosition(x, y);
-            Console.WriteLine(c);
+            Console.Write(c);
+            Console.SetCursorPosition(0, 0);
         }
 
 
