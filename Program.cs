@@ -9,6 +9,7 @@ namespace Tetris
 {
     class Program
     {
+        static FigureGenerator generator;
         static void Main(string[] args)
         {
             Console.SetWindowSize(Field.Width, Field.Height);
@@ -16,7 +17,7 @@ namespace Tetris
 
 
 
-            FigureGenerator generator = new FigureGenerator(20, 0, '*');
+            generator = new FigureGenerator(20, 0, '*');
             Figure currentFigure = generator.GetNewFigure();
 
             while (true)
@@ -24,29 +25,43 @@ namespace Tetris
                 if (Console.KeyAvailable)
                 {
                     var key = Console.ReadKey();
-                    HandlKey(currentFigure, key);
+                    var result = HandlKey(currentFigure,key.Key);
+                    ProcessResult(result, ref currentFigure);
                 }
             }
 
         }
 
-        private static void HandlKey(Figure currentFigure, ConsoleKeyInfo key)
+        private static bool ProcessResult(Result result, ref Figure currentFigure)
         {
-            switch (key.Key)
+            if (result == Result.HEAP_STRIKE || result == Result.DOWN_BORDER_STRIKE)
+            {
+                Field.AddFigure(currentFigure);
+                currentFigure = generator.GetNewFigure();
+                return true;
+            }
+            else
+                return false;
+        }
+
+        private static Result HandlKey(Figure f, ConsoleKey key)
+        {
+            switch (key)
             {
                 case ConsoleKey.LeftArrow:
-                    currentFigure.TryMove(Direction.LEFT);
+                    f.TryMove(Direction.LEFT);
                     break;
                 case ConsoleKey.RightArrow:
-                    currentFigure.TryMove(Direction.RIGHT);
+                    f.TryMove(Direction.RIGHT);
                     break;
                 case ConsoleKey.DownArrow:
-                    currentFigure.TryMove(Direction.DOWN);
+                    f.TryMove(Direction.DOWN);
                     break;
                 case ConsoleKey.Spacebar:
-                    currentFigure.TryRotate();
+                    f.TryRotate();
                     break;
             }
+            return Result.SUCCESS;
         }
     }
 }
