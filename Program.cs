@@ -4,20 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Tetris
 {
     class Program
     {
+
+        static private Object _lockObject = new object();
+
+        const int TIMER_INTEVAL = 500;
+        static System.Timers.Timer timer;
+
+        static Figure currentFigure;
         static FigureGenerator generator;
         static void Main(string[] args)
         {
+            
+            
             Console.SetWindowSize(Field.Width, Field.Height);
             Console.SetBufferSize(Field.Width, Field.Height);
 
 
 
-            generator = new FigureGenerator(20, 0, '*');
+            generator = new FigureGenerator(Field.Width/2, 0, Drawer.DEFAULT_SYMBOL);
             Figure currentFigure = generator.GetNewFigure();
 
             while (true)
@@ -25,8 +35,10 @@ namespace Tetris
                 if (Console.KeyAvailable)
                 {
                     var key = Console.ReadKey();
-                    var result = HandlKey(currentFigure,key.Key);
+                    Monitor.Enter(_lockObject);
+                    var result = HandlKey(currentFigure, key.Key);
                     ProcessResult(result, ref currentFigure);
+                    Monitor.Exit(_lockObject);
                 }
             }
 
@@ -37,6 +49,7 @@ namespace Tetris
             if (result == Result.HEAP_STRIKE || result == Result.DOWN_BORDER_STRIKE)
             {
                 Field.AddFigure(currentFigure);
+                Field.TryDeleteLines();
                 currentFigure = generator.GetNewFigure();
                 return true;
             }
@@ -62,6 +75,22 @@ namespace Tetris
                     break;
             }
             return Result.SUCCESS;
+        }
+        private static void SetTimer()
+        {
+            timer = new System.Timers.Timer(TIMER_INTEVAL);
+            timer.Elapsed += OnTimedEvent;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+        }
+
+        private static void OnTimedEvent(object sender, ElapsedEventArgs e)
+        {
+            Monitor.Enter(_lockObject);
+            var result = currentFigure.TryMove(Direction.DOWN);
+            ProcessResult(result,ref currentFigure);
+            Monitor.Exit(_lockObject);
+
         }
     }
 }
