@@ -1,38 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Tetris
 {
     static class Field
     {
-        private static int _width = 30;
-        private static int _height = 30;
+        private static int _width = 20;
+        private static int _height = 20;
+
         public static int Width
         {
             get
             {
                 return _width;
             }
-
             set
             {
                 _width = value;
                 Console.SetWindowSize(_width, Field.Height);
                 Console.SetBufferSize(_width, Field.Height);
             }
-
         }
-
         public static int Height
         {
             get
             {
                 return _height;
             }
-
             set
             {
                 _height = value;
@@ -47,25 +42,38 @@ namespace Tetris
         static Field()
         {
             _heap = new bool[Height][];
-            for (int i = 0; i < Height; i++)
+            for(int i = 0; i < Height; i++)
             {
                 _heap[i] = new bool[Width];
             }
         }
 
-      public static void TryDeleteLines()
+        public static bool CheckStrike(Point p)
         {
-            for(int j=0;j<Height;j++)
+            return _heap[p.Y][p.X];
+        }
+        public static void AddFigure(Figure fig)
+        {
+            foreach(var p in fig.Points)
+            {
+                _heap[p.Y][p.X] = true;
+            }
+        }
+
+        public static void TryDeleteLines()
+        {
+            for (int j = 0; j < Height; j++)
             {
                 int counter = 0;
-                for(int i=0;i<Width;i++)
+
+                for (int i = 0; i < Width; i++)
                 {
                     if (_heap[j][i])
                         counter++;
                 }
-                if (counter==Width)
+                if (counter == Width)
                 {
-                    DeleteLines(j);
+                    DeleteLine(j);
                     Redraw();
                 }
             }
@@ -73,19 +81,19 @@ namespace Tetris
 
         private static void Redraw()
         {
-            for (int j=0;j<Height;j++  )
+            for (int j = 0; j < Height; j++)
             {
-                for(int i=0;i<Width;i++)
+                for (int i = 0; i < Width; i++)
                 {
                     if (_heap[j][i])
-                        Drawer.DrawPoint(j, i);
+                        DrawerProvider.Drawer.DrawPoint(i,j);
                     else
-                        Drawer.HidePoint(j, i);
+                        DrawerProvider.Drawer.HidePoint(i, j);
                 }
             }
         }
 
-        private static void DeleteLines(int line)
+        private static void DeleteLine(int line)
         {
             for (int j = line; j >= 0; j--)
             {
@@ -99,18 +107,6 @@ namespace Tetris
             }
         }
 
-        public static void AddFigure(Figure fig)
-        {
-            foreach(var p in fig.Points)
-            {
-                _heap[p.X][p.Y] = true;
-            }
-        }
-
-        public static bool CheckStrike(Point p)
-        {
-            return _heap[p.Y][p.X];
-        }
 
     }
 }

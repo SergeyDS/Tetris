@@ -1,34 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
 
 namespace Tetris
 {
     class Program
     {
-
+        const int TIMER_INTERVAL = 500;
+        static System.Timers.Timer timer;
         static private Object _lockObject = new object();
 
-        const int TIMER_INTEVAL = 500;
-        static System.Timers.Timer timer;
 
         static Figure currentFigure;
         static FigureGenerator generator;
         static void Main(string[] args)
         {
-            
-            
-            Console.SetWindowSize(Field.Width, Field.Height);
-            Console.SetBufferSize(Field.Width, Field.Height);
 
+            DrawerProvider.Drawer.InitField();
+               
 
-
-            generator = new FigureGenerator(Field.Width/2, 0, Drawer.DEFAULT_SYMBOL);
-            Figure currentFigure = generator.GetNewFigure();
+            generator = new FigureGenerator(Field.Width / 2, 0);
+            currentFigure = generator.GetNewFigure();
+            SetTimer();
 
             while (true)
             {
@@ -36,61 +29,70 @@ namespace Tetris
                 {
                     var key = Console.ReadKey();
                     Monitor.Enter(_lockObject);
-                    var result = HandlKey(currentFigure, key.Key);
+                    var result = HandleKey(currentFigure, key.Key);
                     ProcessResult(result, ref currentFigure);
                     Monitor.Exit(_lockObject);
                 }
             }
-
         }
 
+
+       
         private static bool ProcessResult(Result result, ref Figure currentFigure)
         {
-            if (result == Result.HEAP_STRIKE || result == Result.DOWN_BORDER_STRIKE)
+            if (result == Result.HEAP_STRIKE || result == Result.DOWN_BORDER_SRIKE)
             {
                 Field.AddFigure(currentFigure);
                 Field.TryDeleteLines();
-                currentFigure = generator.GetNewFigure();
-                return true;
+
+                if (currentFigure.IsOnTop())
+                {
+                    DrawerProvider.Drawer.WriteGameOver();
+                    timer.Elapsed -= OnTimedEvent;
+                    return true;
+                }
+                else
+                {
+                    currentFigure = generator.GetNewFigure();
+                    return false;
+                }
             }
             else
                 return false;
         }
 
-        private static Result HandlKey(Figure f, ConsoleKey key)
+        private static Result HandleKey(Figure f, ConsoleKey key)
         {
             switch (key)
             {
                 case ConsoleKey.LeftArrow:
-                    f.TryMove(Direction.LEFT);
-                    break;
+                    return f.TryMove(Direction.LEFT);
                 case ConsoleKey.RightArrow:
-                    f.TryMove(Direction.RIGHT);
-                    break;
+                    return f.TryMove(Direction.RIGHT);
                 case ConsoleKey.DownArrow:
-                    f.TryMove(Direction.DOWN);
-                    break;
+                    return f.TryMove(Direction.DOWN);
                 case ConsoleKey.Spacebar:
-                    f.TryRotate();
-                    break;
+                    return f.TryRotate();
             }
             return Result.SUCCESS;
         }
         private static void SetTimer()
         {
-            timer = new System.Timers.Timer(TIMER_INTEVAL);
+            // Create a timer with a two second interval.
+            timer = new System.Timers.Timer(TIMER_INTERVAL);
+            // Hook up the Elapsed event for the timer. 
             timer.Elapsed += OnTimedEvent;
             timer.AutoReset = true;
             timer.Enabled = true;
         }
 
+        
         private static void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             Monitor.Enter(_lockObject);
             var result = currentFigure.TryMove(Direction.DOWN);
-            ProcessResult(result,ref currentFigure);
+            ProcessResult(result, ref currentFigure);
             Monitor.Exit(_lockObject);
-
         }
     }
 }
